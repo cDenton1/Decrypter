@@ -60,7 +60,7 @@ def callMod(opt, encryptS):
         run = input("  [c]Continue \n  [r]Revert \n  [e]Exit \nChoice: ").strip().lower()
         if run == 'e':
             print(f"Final string: {ret}\n")
-            exit(2)
+            exit(0)
         elif run == 'c':
             print(f"String: {ret}")
             return ret
@@ -83,10 +83,10 @@ def helpMenu():
 def main(argv):
     if len(argv) < 2:
         print("Usage: decrypter <encrypted string> \nFor Help: decrypter -h")
-        sys.exit(1)
+        exit(0)
     if argv[1] == '-h':
         helpMenu()
-        sys.exit(3)
+        exit(0)
 
     encryptS = argv[1]
 
@@ -114,7 +114,7 @@ def main(argv):
         elif opt == 'p' and optPage > 1:
             optPage -= 1
         elif opt == 'e':
-            exit(2)
+            exit(0)
         elif opt.isdigit():
             run = callMod(int(opt), encryptS)
             if run == False:
