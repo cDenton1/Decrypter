@@ -71,13 +71,9 @@ def callMod(opt, encryptS):
             print("Invalid option, try again.")
 
 def helpMenu():
-    print("Welcome to Decrypter! \nDecrypter is a command line tool for decrypting a string or message in as many steps as you want. " \
-    "The tool is made up of a main file, and then separate modules for each decryption method. It is in the early development " \
-    "stages and very much still a work in progress; but I hope you see it's potential.\n")
+    print("Welcome to Decrypter! \nUsage: decrypter <encrypted string>\n")
 
-    print("Usage: decrypter <encrypted string>\n")
-
-    print("Current Available Modules: \n  [1]Base64 - ... \n  [2]ROT13- ...")
+    print("Current Available Modules: \n  [1]Base64 - Decode Base64 strings \n  [2]ROT13 - Decode ROT13 encoded strings; includes options for digit shifting and brute forcing")
     return
 
 def main(argv):

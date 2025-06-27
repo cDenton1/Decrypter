@@ -1,0 +1,56 @@
+.TH Decrypter (1) "Decrypter Manual"
+.SH NAME
+.B decrypter
+- Modular command-line cybersecurity tool for decoding
+
+.SH SYNOPSIS
+.B decrypter
+.RB {| OBJECT |}
+
+.SH DESCRIPTION
+.B decrypter
+Decrypter is a modular command line tool for decrypting, or reversing a string, or message in as many steps as you want, using various techniques. 
+
+.SH MODULES
+.B base64
+- Decode Base64 strings.
+.B rot13
+- Decode ROT13 encoded strings; includes options for digit shifting and brute forcing.
+
+.SH Options
+.IP -h 
+Prints help
+
+.SH EXAMPLES
+.B decrypter "Ithixcv dji hdbt rdst!"
+.RS
+Decode Options: 
+[e]Exit
+   [1]Base64
+   [2]ROT13
+Choice: 2
+
+Default only shifts letters. 
+Shift digits [y/n]? n
+
+Default only shifts 13, brute force tries every possible shift. 
+Brute force [y/n]? y
+
+Encrypted string: Ithixcv dji hdbt rdst!
+
+ROT1: Juijydw ekj iecu setu!
+...
+ROT25: Hsghwbu cih gcas qcrs!
+
+Enter ROT shift # to continue with: 11
+ROT11: Testing out some code!
+
+  [c]Continue
+  [r]Revert
+  [e]Exit
+Choice: e
+Final string: Testing out some code!
+.RE
+
+.SH CREDITS
+This man page is created by cDenton1 on GitHub for the purpose of helping users better understand their tool, Decrypter.
