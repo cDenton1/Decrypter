@@ -1,56 +1,69 @@
-.TH Decrypter (1) "Decrypter Manual"
+.TH DECRYPTER 1 "June 2025" "1.0" "Decrypter Manual"
 .SH NAME
-.B decrypter
-- Modular command-line cybersecurity tool for decoding
+decrypter \- modular command-line cybersecurity tool for decoding
 
 .SH SYNOPSIS
 .B decrypter
-.RB {| OBJECT |}
+[\fISTRING\fR]
 
 .SH DESCRIPTION
 .B decrypter
-Decrypter is a modular command line tool for decrypting, or reversing a string, or message in as many steps as you want, using various techniques. 
+is a modular command-line tool for decoding or reversing strings using various techniques. You can apply multiple decoding methods step-by-step, including Base64, ROT13, and more.
 
 .SH MODULES
+.TP
 .B base64
-- Decode Base64 strings.
+Decode Base64-encoded strings.
+.TP
 .B rot13
-- Decode ROT13 encoded strings; includes options for digit shifting and brute forcing.
+Decode ROT13-encoded strings. Includes optional digit shifting and brute-force guessing.
 
-.SH Options
-.IP -h 
-Prints help
+.SH OPTIONS
+.TP
+.B -h
+Prints help message.
 
 .SH EXAMPLES
 .B decrypter "Ithixcv dji hdbt rdst!"
 .RS
-Decode Options: 
-[e]Exit
-   [1]Base64
-   [2]ROT13
-Choice: 2
+Decode Options:
+.br
+[e] Exit
+.br
+[1] Base64
+.br
+[2] ROT13
 
-Default only shifts letters. 
+.br
 Shift digits [y/n]? n
-
-Default only shifts 13, brute force tries every possible shift. 
+.br
 Brute force [y/n]? y
 
-Encrypted string: Ithixcv dji hdbt rdst!
-
+.br
 ROT1: Juijydw ekj iecu setu!
+.br
 ...
+.br
 ROT25: Hsghwbu cih gcas qcrs!
 
-Enter ROT shift # to continue with: 11
+.br
+Enter ROT shift #: 11
+.br
 ROT11: Testing out some code!
 
-  [c]Continue
-  [r]Revert
-  [e]Exit
-Choice: e
+.br
+[c] Continue
+.br
+[r] Revert
+.br
+[e] Exit
+
+.br
 Final string: Testing out some code!
 .RE
 
-.SH CREDITS
-This man page is created by cDenton1 on GitHub for the purpose of helping users better understand their tool, Decrypter.
+.SH AUTHOR
+Created by Clay Denton (cDenton1 on GitHub) to assist users with decoding tasks using a modular CLI tool.
+
+.SH SEE ALSO
+base64(1), tr(1), xxd(1)
