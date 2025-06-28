@@ -4,9 +4,14 @@ import importlib    #.util
 import os
 import sys
 
+import modules.helpMenu as helpMenu
+
 # decryption modules below
 import modules.modBase64 as modBase64
 import modules.modROT13 as modROT13
+import modules.modBinary as modBinary
+import modules.modHex as modHex
+import modules.modHexdump as modHexdump
 
 # region LOAD MODULE FUNCTION FOR LINUX
 # COMMENT OUT THE IMPORT LINES ABOVE AND UNCOMMENT .util AND THE FUNCTION BELOW
@@ -30,6 +35,7 @@ import modules.modROT13 as modROT13
 #     module_map = {
 #         1: 'modBase64',
 #         2: 'modROT13'
+#         3: 'modBinary'
 #         # Add more mappings as needed
 #     }
 
@@ -53,40 +59,40 @@ def callMod(opt, encryptS):
         ret = modBase64.conv(encryptS)
     elif opt == 2:
         ret = modROT13.conv(encryptS)
+    elif opt == 3:
+        ret = modBinary.conv(encryptS)
+    elif opt == 4:
+        ret = modHex.conv(encryptS)
+    elif opt == 5:
+        ret = modHexdump.conv(encryptS)
     else:
         return False
     
     while True:
+        # print(f"String: {ret}")       # for debugging
         run = input("  [c]Continue \n  [r]Revert \n  [e]Exit \nChoice: ").strip().lower()
         if run == 'e':
             print(f"Final string: {ret}\n")
             exit(0)
         elif run == 'c':
-            print(f"String: {ret}")
             return ret
         elif run == 'r':
-            print(f"String: {encryptS}")
+            print(f"Revert back to string: {encryptS}")
             return encryptS
         else:
             print("Invalid option, try again.")
-
-def helpMenu():
-    print("Welcome to Decrypter! \nUsage: decrypter <encrypted string>\n")
-
-    print("Current Available Modules: \n  [1]Base64 - Decode Base64 strings \n  [2]ROT13 - Decode ROT13 encoded strings; includes options for digit shifting and brute forcing")
-    return
 
 def main(argv):
     if len(argv) < 2:
         print("Usage: decrypter <encrypted string> \nFor Help: decrypter -h")
         exit(0)
     if argv[1] == '-h':
-        helpMenu()
+        helpMenu.main()
         exit(0)
 
     encryptS = argv[1]
 
-    optList = ["[1]Base64", "[2]ROT13", "[3]Binary", "[4]Hex", "[5]Placeholder", "[6]Placeholder"]
+    optList = ["[1]Base64", "[2]ROT13", "[3]Binary", "[4]Hex", "[5]Hexdump"]
     optPerPage = 5
     optPage = 1
     opt = None

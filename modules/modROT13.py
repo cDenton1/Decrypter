@@ -11,7 +11,7 @@ def shiftLogic(encryptS, shift, digShift):
             shifted = char
         result += shifted
     print(f"ROT{shift}: {result}")
-    return(result)
+    return result
 
 def conv(encryptS):
     result = ""
@@ -47,4 +47,4 @@ def conv(encryptS):
         result = shiftLogic(encryptS, shift, digShift)
         print(" ")
     
-    return(result)
+    return result
