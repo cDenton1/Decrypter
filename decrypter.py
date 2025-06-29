@@ -12,6 +12,20 @@ import modules.modROT13 as modROT13
 import modules.modBinary as modBinary
 import modules.modHex as modHex
 import modules.modHexdump as modHexdump
+import modules.modURLde as modURLde
+import modules.modMorseC as modMorseC
+import modules.modXOR as modXOR
+
+decryptMods = [
+    (1, modBase64),
+    (2, modROT13),
+    (3, modBinary),
+    (4, modHex), 
+    (5, modHexdump),
+    (6, modURLde),
+    (7, modMorseC),
+    (8, modXOR)
+]
 
 # region LOAD MODULE FUNCTION FOR LINUX
 # COMMENT OUT THE IMPORT LINES ABOVE AND UNCOMMENT .util AND THE FUNCTION BELOW
@@ -55,22 +69,15 @@ import modules.modHexdump as modHexdump
 # endregion
 
 def callMod(opt, encryptS):
-    if opt == 1:
-        ret = modBase64.conv(encryptS)
-    elif opt == 2:
-        ret = modROT13.conv(encryptS)
-    elif opt == 3:
-        ret = modBinary.conv(encryptS)
-    elif opt == 4:
-        ret = modHex.conv(encryptS)
-    elif opt == 5:
-        ret = modHexdump.conv(encryptS)
-    else:
+    try:
+        mod = decryptMods[opt - 1][1]
+        ret = mod.conv(encryptS)
+    except Exception:
         return False
     
     while True:
         # print(f"String: {ret}")       # for debugging
-        run = input("  [c]Continue \n  [r]Revert \n  [e]Exit \nChoice: ").strip().lower()
+        run = input("  [c]Continue with another technique\n  [r]Revert back a step\n  [e]Exit \nChoice: ").strip().lower()
         if run == 'e':
             print(f"Final string: {ret}\n")
             exit(0)
@@ -92,7 +99,7 @@ def main(argv):
 
     encryptS = argv[1]
 
-    optList = ["[1]Base64", "[2]ROT13", "[3]Binary", "[4]Hex", "[5]Hexdump"]
+    optList = ["[1]Base64", "[2]ROT13", "[3]Binary", "[4]Hex", "[5]Hexdump", "[6]URL Decode", "[7]Morse Code", "[8]XOR"]
     optPerPage = 5
     optPage = 1
     opt = None
@@ -116,6 +123,7 @@ def main(argv):
         elif opt == 'p' and optPage > 1:
             optPage -= 1
         elif opt == 'e':
+            print(f"Final string: {encryptS}\n")
             exit(0)
         elif opt.isdigit():
             run = callMod(int(opt), encryptS)
@@ -123,6 +131,7 @@ def main(argv):
                 print("Invalid option, try again.")
             else:
                 encryptS = run
+                optPage = 1
         else:
             print("Invalid input, try again.")
 

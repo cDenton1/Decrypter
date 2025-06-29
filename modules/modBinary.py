@@ -32,6 +32,6 @@ def conv(encryptS):
         print(f"\nFrom Binary: {result}\n")
         return result
     
-    except Exception as e:
+    except Exception:
         print(f"\nInvalid binary string: {encryptS}")
         return encryptS 

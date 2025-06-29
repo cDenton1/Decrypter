@@ -26,23 +26,23 @@ def conv(encryptS):
             digShift = None
             print("Invalid option, try again. \n")
 
-    bruteFore = None
-    while bruteFore == None:
-        bruteFore = input("\nDefault only shifts 13, brute force tries every possible shift. \nBrute force [y/n]? ").strip().lower()
-        if bruteFore == 'y':
-            bruteFore = True
-        elif bruteFore == 'n':
-            bruteFore = False
+    bruteForce = None
+    while bruteForce == None:
+        bruteForce = input("\nDefault only shifts 13, brute force tries every possible shift. \nBrute force [y/n]? ").strip().lower()
+        if bruteForce == 'y':
+            bruteForce = True
+        elif bruteForce == 'n':
+            bruteForce = False
         else:
-            bruteFore = None
+            bruteForce = None
             print("Invalid option, try again. \n")
 
     print(f"\nEncrypted string: {encryptS}\n")
-    shifts = range(1, 26) if bruteFore else [13]
+    shifts = range(1, 26) if bruteForce else [13]
     for shift in shifts:
         result = shiftLogic(encryptS, shift, digShift)
     
-    if bruteFore == True:
+    if bruteForce == True:
         shift = int(input("\nEnter ROT shift # to continue with: "))
         result = shiftLogic(encryptS, shift, digShift)
         print(" ")
