@@ -9,8 +9,8 @@ def main():
     "[3]Binary \t- Decode Binary strings; including options for strings not made of 0/1's\n  "
     "[4]Hex \t- Decode Hex encoded strings\n  "
     "[5]Hexdump \t- Decode strings from Hexdumps\n  "
-    "[6]URL Decode \t- Decode URI/URL percent encodings to raw values\n " 
-    "[7]Morse Code \t- Decode strings of morse code\n" 
-    "[8]XOR \t- Decipher a string with a known key or brute force")
+    "[6]URL Decode - Decode URI/URL percent encodings to raw values\n  " 
+    "[7]Morse Code - Decode strings of morse code\n  " 
+    "[8]XOR \t- Decipher a string with a known key or brute force\n  ")
     
     return
