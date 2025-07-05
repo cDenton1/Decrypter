@@ -9,7 +9,11 @@ import datetime
 import menus.menuHelp as menuHelp
 import menus.menuMods as menuMods
 
-MOD_PATH = os.path.join(os.path.dirname(__file__), 'modules')
+if str(os.name) == 'posix':
+    SCRIPT_DR = os.path.dirname(os.path.realpath(__file__))
+    MOD_PATH = os.path.join(SCRIPT_DR, 'modules')
+else:
+    MOD_PATH = os.path.join(os.path.dirname(__file__), 'modules')
 
 # region IMPORTS
 # original static decryption module imports
