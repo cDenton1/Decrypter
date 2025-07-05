@@ -29,7 +29,7 @@ sudo mandb
 
 Once setup, you don't require `python` everytime you run it, instead use:
 ```
-decrypter <encrypted string>
+decrypter <encrypted string> <options>
 ```
 
 For __Windows__, the easiest way to run it, would be in whatever directory Decrypter is in and using the following command:
