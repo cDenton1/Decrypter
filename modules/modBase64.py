@@ -4,7 +4,7 @@ import binascii
 def conv(encryptS):
     try:
         decoded = base64.b64decode(encryptS).decode('utf-8')
-        print(f"\nFrom base64: {decoded}\n")
+        print(f"\nFrom Base64: {decoded}\n")
         return decoded
     
     except (binascii.Error, UnicodeDecodeError):

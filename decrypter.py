@@ -15,6 +15,8 @@ import modules.modHexdump as modHexdump
 import modules.modURLde as modURLde
 import modules.modMorseC as modMorseC
 import modules.modXOR as modXOR
+import modules.modAtBash as modAtBash
+import modules.modOctal as modOctal
 
 decryptMods = [
     (1, modBase64),
@@ -24,7 +26,9 @@ decryptMods = [
     (5, modHexdump),
     (6, modURLde),
     (7, modMorseC),
-    (8, modXOR)
+    (8, modXOR),
+    (9, modAtBash),
+    (10, modOctal)
 ]
 
 # region LOAD MODULE FUNCTION FOR LINUX
@@ -99,7 +103,8 @@ def main(argv):
 
     encryptS = argv[1]
 
-    optList = ["[1]Base64", "[2]ROT13", "[3]Binary", "[4]Hex", "[5]Hexdump", "[6]URL Decode", "[7]Morse Code", "[8]XOR"]
+    optList = ["[1]Base64", "[2]ROT13", "[3]Binary", "[4]Hex", "[5]Hexdump", 
+               "[6]URL Decode", "[7]Morse Code", "[8]XOR", "[9]AtBash", "[10]Octal"]
     optPerPage = 5
     optPage = 1
     opt = None
