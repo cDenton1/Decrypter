@@ -1,7 +1,7 @@
 import os
 
 def main():
-    print("Welcome to Decrypter! \nUsage: decrypter <encrypted string> <options>\n")
+    print("Welcome to Decrypter! \nUsage: decrypter <encrypted string> [-f <file>] [-o] [-m] [-h]\n")
 
     print("Options: \n " \
     "-f \t File input, replace encrypted string with filename \n " \
