@@ -3,9 +3,15 @@ import argparse
 import importlib    #.util
 import os
 import sys
+import datetime
 
-import modules.helpMenu as helpMenu
+# region MENU IMPORTS
+# option menus
+import menus.menuHelp as menuHelp
+import menus.menuMods as menuMods
+# endregion
 
+# region MODULE IMPORTS
 # decryption modules below
 import modules.modBase64 as modBase64
 import modules.modROT13 as modROT13
@@ -17,7 +23,9 @@ import modules.modMorseC as modMorseC
 import modules.modXOR as modXOR
 import modules.modAtBash as modAtBash
 import modules.modOctal as modOctal
+# endregion
 
+# module mapping
 decryptMods = [
     (1, modBase64),
     (2, modROT13),
@@ -31,113 +39,106 @@ decryptMods = [
     (10, modOctal)
 ]
 
-# region LOAD MODULE FUNCTION FOR LINUX
-# COMMENT OUT THE IMPORT LINES ABOVE AND UNCOMMENT .util AND THE FUNCTION BELOW
+# option list of modules
+optList = ["[1]Base64", "[2]ROT13", "[3]Binary", "[4]Hex", "[5]Hexdump", "[6]URL Decode", "[7]Morse Code", "[8]XOR", "[9]AtBash", "[10]Octal"]
 
-# def load_module(name):
-#     base_path = os.path.dirname(os.path.realpath(__file__))
-#     module_path = os.path.join(base_path, 'modules', f'{name}.py')
-
-#     if not os.path.exists(module_path):
-#         return None
-
-#     spec = importlib.util.spec_from_file_location(name, module_path)
-#     module = importlib.util.module_from_spec(spec)
-#     spec.loader.exec_module(module)
-#     return module
-# endregion
-
-# region BEGINNING OF CALLMOD FUNCTION FOR LINUX
-# REPLACE THE callMod BEFORE THE WHILE LOOP WITH THE BELOW
-# def callMod(opt, encryptS):
-#     module_map = {
-#         1: 'modBase64',
-#         2: 'modROT13'
-#         3: 'modBinary'
-#         # Add more mappings as needed
-#     }
-
-#     if opt not in module_map:
-#         return False
-
-#     mod = load_module(module_map[opt])
-#     if not mod:
-#         print(f"[-] Module '{module_map[opt]}' not found.")
-#         return False
-
-#     try:
-#         ret = mod.conv(encryptS)
-#     except Exception as e:
-#         print(f"[-] Error running module: {e}")
-#         return False
-# endregion
-
-def callMod(opt, encryptS):
+# call decryption module
+def callMod(opt, encryptS, file):
     try:
-        mod = decryptMods[opt - 1][1]
-        ret = mod.conv(encryptS)
+        mod = decryptMods[opt - 1][1]   # map chosen module
+        ret = mod.conv(encryptS)        # store retured result
     except Exception:
-        return False
+        return False                    # return false if not a valid module
     
     while True:
-        # print(f"String: {ret}")       # for debugging
         run = input("  [c]Continue with another technique\n  [r]Revert back a step\n  [e]Exit \nChoice: ").strip().lower()
-        if run == 'e':
-            print(f"Final string: {ret}\n")
+        
+        if run == 'e':                                                              # if exit
+            print(f"Final string: {ret}\n")                                         # print final
+            if file != None:                                                        # check if output file
+                file.write(f"\nFinal string: \n{optList[opt - 1][4:]}: {ret}\n")    # write to file
             exit(0)
-        elif run == 'c':
-            return ret
-        elif run == 'r':
-            print(f"Revert back to string: {encryptS}")
-            return encryptS
+
+        elif run == 'c':                                            # if continue
+            if file != None:                                        # check if output file
+                file.write(f"\n{optList[opt - 1][4:]}: {ret}\n")    # write to file
+            return ret                                              # return result string
+        
+        elif run == 'r':                                    # if revert
+            print(f"Revert back to string: {encryptS}")     # print string before decryption attempt
+            return encryptS                                 # return current string
+        
         else:
             print("Invalid option, try again.")
 
+def readFile(fpath):            # if input file
+    file = open(fpath, "r")     # store and read file
+    return file.readline()      # read line, store string
+
 def main(argv):
-    if len(argv) < 2:
-        print("Usage: decrypter <encrypted string> \nFor Help: decrypter -h")
-        exit(0)
-    if argv[1] == '-h':
-        helpMenu.main()
+    file = None
+    if len(argv) < 2:                                                           # check if arguments
+        print("Usage: decrypter <encrypted string> \nFor Help: decrypter -h")   # print help message
         exit(0)
 
-    encryptS = argv[1]
+    if argv[1] == '-h':     # if help option
+        menuHelp.main()     # call help menu
+        exit(0)
+    elif argv[1] == '-m':   # if module option
+        menuMods.main()     # call module menu
+        exit(0)
+    elif argv[1] == '-f':           # if input file
+        fpath = argv[2]             # store file path
+        encryptS = readFile(fpath)  # store returned string from file
+    else:
+        if argv[1] == '-o':                                     # if output file
+            encryptS = argv[2]                                  # store encryption string
 
-    optList = ["[1]Base64", "[2]ROT13", "[3]Binary", "[4]Hex", "[5]Hexdump", 
-               "[6]URL Decode", "[7]Morse Code", "[8]XOR", "[9]AtBash", "[10]Octal"]
+            cDate = datetime.datetime.now().date()              # store date
+            fpath = f"decrypter-{cDate}.txt"                    # create filename
+            with open(fpath, "w") as file:                      # open file
+                file.write(f"Encrypted String: {encryptS}\n")   # write given encryption string
+
+            file = open(fpath, "a")                             # open as append
+        else:
+            encryptS = argv[1]  # store encrypted string
+    
+    # option page functionality
     optPerPage = 5
     optPage = 1
     opt = None
 
+    # run if option not exit
     while opt != 'e': 
+        # option page functionality
         optStart = (optPage - 1) * optPerPage
         optEnd = optStart + optPerPage
         pageOpt = optList[optStart:optEnd]
         
-        print("\nDecode Options: \n[e]Exit")
-        if optPage > 1:
-            print("[p]Previous Page")
-        for opt in pageOpt:
-            print("  ", opt)
-        if optEnd < len(optList):
-            print("[n]Next Page")
-        opt = input("Choice: ").strip().lower()
+        print("\nDecode Options: \n[e]Exit")        # print list header and exit option
+        if optPage > 1:                             # check if not the first page
+            print("[p]Previous Page")               # print previous page option
+        for opt in pageOpt:                         # loop through options
+            print("  ", opt)                        # print
+        if optEnd < len(optList):                   # check if not the last page
+            print("[n]Next Page")                   # print next page option
+        opt = input("Choice: ").strip().lower()     # store user choice
 
-        if opt == 'n' and optEnd < len(optList):
-            optPage += 1
-        elif opt == 'p' and optPage > 1:
-            optPage -= 1
-        elif opt == 'e':
-            print(f"Final string: {encryptS}\n")
+        if opt == 'n' and optEnd < len(optList):    # if next page chosen
+            optPage += 1                            # move to next page
+        elif opt == 'p' and optPage > 1:            # if previous page chosen
+            optPage -= 1                            # move back a page
+        elif opt == 'e':                            # if exit chosen
+            print(f"Final string: {encryptS}\n")    # print current/final string
             exit(0)
-        elif opt.isdigit():
-            run = callMod(int(opt), encryptS)
-            if run == False:
-                print("Invalid option, try again.")
+        elif opt.isdigit():                             # if number is chosen
+            run = callMod(int(opt), encryptS, file)     # call run with option, encrypted string, and file path
+            if run == False:                            # if false
+                print("Invalid option, try again.")     # invalid option
             else:
-                encryptS = run
-                optPage = 1
-        else:
+                encryptS = run                          # store returned string
+                optPage = 1                             # reset to first page
+        else: 
             print("Invalid input, try again.")
 
 if __name__ == '__main__':

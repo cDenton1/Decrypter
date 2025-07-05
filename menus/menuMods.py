@@ -1,7 +1,9 @@
-def main():
-    print("Welcome to Decrypter! \nUsage: decrypter <encrypted string>\n")
+import os
 
-    print("Strings with SPACES require SINGLE QUOTES\n")
+def main():
+    print("Welcome to Decrypter! \nUsage: decrypter <encrypted string> <options>\n")
+
+    print("Decryption methods are selected once the script is running\n")
 
     print("Current Available Modules:\n  " \
     "[1]Base64 \t- Decode Base64 strings\n  " \
@@ -14,5 +16,9 @@ def main():
     "[8]XOR \t- Decipher a string with a known key or brute force\n  " \
     "[9]AtBash \t- Substitution cipher that reverses the alphabet\n  " \
     "[10]Octal \t- Decodes octal numbers to decimal and converts from ASCII\n  ")
+
+    osN = os.name
+    if osN == 'posix':
+        print("man decrypter \t- For more info")
     
     return

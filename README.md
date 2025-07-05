@@ -6,8 +6,6 @@ Decrypter is a modular command line tool for decrypting, or reversing a string, 
 
 To use this tool, ensure you have python and any required dependencies and libraries installed.
 
-Each module is also required at this time, a future version will include some logic to make each module optional.
-
 ### Cloning the Repository
 
 ```
