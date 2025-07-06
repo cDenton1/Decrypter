@@ -1,6 +1,6 @@
 # Decrypter
 
-Decrypter is a modular command line tool for decrypting, or reversing a string, or message in as many steps as you want, using various techniques.
+Decrypter is a modular command-line tool for decoding or reversing strings using various techniques. You can apply multiple decoding methods step-by-step, and some techniques even include other options for brute forcing, digit shifting, and even character substitution.
 
 ## Installation
 
@@ -15,7 +15,15 @@ cd Decrypter
 
 ### Usage
 
-For __Linux__ run the `install.sh` file or the below commands to set it up as a typical command line tool: 
+#### Windows
+
+```
+python decrypter <encrypted string> [-f <file>] [-o] [-m] [-h]
+```
+
+#### Linux
+
+Run the `install.sh` file or the below commands to set it up as a typical command line tool: 
 
 ```
 mv decrypter.py decrypter
@@ -26,13 +34,16 @@ gzip -c decrypter.1 > decrypter.1.gz
 sudo mv decrypter.1.gz /usr/share/man/man1/
 sudo mandb
 ```
-
-Once setup, you don't require `python` everytime you run it, instead use:
 ```
 decrypter <encrypted string> [-f <file>] [-o] [-m] [-h]
 ```
 
-For __Windows__, the easiest way to run it, would be in whatever directory Decrypter is in and using the following command:
-```
-python decrypter <encrypted string> [-f <file>] [-o] [-m] [-h]
-```
+![Usage Example Kali Linux](/assets/output1.png "Usage Example Kali Linux")
+
+## Module Expansion
+
+Adding a new module requires the following:
+
+- The file must be in the __modules__ subfolder
+- The filename must start with 'mod' and end with '.py'
+- Must include a callable function, 'conv'
