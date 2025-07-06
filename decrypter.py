@@ -58,8 +58,10 @@ def loadMods():
                 print(f"[-] Failed to load {name}: {e}")
     return modules
 
-def dOptList(modules):      # creates option list for printing
-    return [f"[{i + 1}]{m.__name__[3:]}" for i, m in enumerate(modules)]
+def dOptList(modules, optList):      # creates option list of tuples for printing
+    for i, m in enumerate(modules):
+        optList.append((i + 1, m.__name__[3:]))
+    return optList
 
 # call decryption module
 def callMod(opt, encryptS, file, modules, optList):
@@ -113,8 +115,10 @@ def main(argv):
         exit(0)
 
     file = None
+    optList = []
+
     modules = loadMods()
-    optList = dOptList(modules)
+    optList = dOptList(modules, optList)
 
     if args.file:                       # if input file
         encryptS = readFile(args.file)  # store returned string from file
@@ -143,14 +147,14 @@ def main(argv):
         optEnd = optStart + optPerPage
         pageOpt = optList[optStart:optEnd]
         
-        print(f"\nDecode Options: \n{RED}[e]{RESET}Exit")         # print list header and exit option
-        if optPage > 1:                                             # check if not the first page
-            print(f"{RED}[p]{RESET}Previous Page")                # print previous page option
-        for opt in pageOpt:                                         # loop through options
-            print(f"  {BLUE}{opt[:3]}{RESET}{opt[3:]}")           # print
-        if optEnd < len(optList):                                   # check if not the last page
-            print(f"{RED}[n]{RESET}Next Page")                    # print next page option
-        opt = input("Choice: ").strip().lower()                     # store user choice
+        print(f"\nDecode Options: \n{RED}[e]{RESET}Exit")       # print list header and exit option
+        if optPage > 1:                                         # check if not the first page
+            print(f"{RED}[p]{RESET}Previous Page")              # print previous page option
+        for n, opt in pageOpt:                                  # loop through options
+            print(f"  {BLUE}[{n}]{RESET} {opt}")                # print
+        if optEnd < len(optList):                               # check if not the last page
+            print(f"{RED}[n]{RESET}Next Page")                  # print next page option
+        opt = input("Choice: ").strip().lower()                 # store user choice
 
         if opt == 'n' and optEnd < len(optList):    # if next page chosen
             optPage += 1                            # move to next page
