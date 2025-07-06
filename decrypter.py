@@ -9,6 +9,11 @@ import datetime
 import menus.menuHelp as menuHelp
 import menus.menuMods as menuMods
 
+# ANSI colour mapping
+RED = '\033[31m'
+BLUE = '\033[34m'
+RESET = '\033[0m'
+
 if str(os.name) == 'posix':
     SCRIPT_DR = os.path.dirname(os.path.realpath(__file__))
     MOD_PATH = os.path.join(SCRIPT_DR, 'modules')
@@ -64,8 +69,9 @@ def callMod(opt, encryptS, file, modules, optList):
     except Exception:
         return False                    # return false if not a valid module
     
-    while True:
-        run = input("  [c]Continue with another technique\n  [r]Revert back a step\n  [e]Exit \nChoice: ").strip().lower()
+    while True:             # RED/RESET: ANSI escape and colour codes predefined
+        run = input(f"  {RED}[c]{RESET}Continue with another technique\n  " \
+        f"{RED}[r]{RESET}Revert back a step\n  {RED}[e]{RESET}Exit \nChoice: ").strip().lower()
         
         if run == 'e':                                                              # if exit
             print(f"Final string: {ret}\n")                                         # print final
@@ -137,14 +143,14 @@ def main(argv):
         optEnd = optStart + optPerPage
         pageOpt = optList[optStart:optEnd]
         
-        print("\nDecode Options: \n[e]Exit")        # print list header and exit option
-        if optPage > 1:                             # check if not the first page
-            print("[p]Previous Page")               # print previous page option
-        for opt in pageOpt:                         # loop through options
-            print("  ", opt)                        # print
-        if optEnd < len(optList):                   # check if not the last page
-            print("[n]Next Page")                   # print next page option
-        opt = input("Choice: ").strip().lower()     # store user choice
+        print(f"\nDecode Options: \n{RED}[e]{RESET}Exit")         # print list header and exit option
+        if optPage > 1:                                             # check if not the first page
+            print(f"{RED}[p]{RESET}Previous Page")                # print previous page option
+        for opt in pageOpt:                                         # loop through options
+            print(f"  {BLUE}{opt[:3]}{RESET}{opt[3:]}")           # print
+        if optEnd < len(optList):                                   # check if not the last page
+            print(f"{RED}[n]{RESET}Next Page")                    # print next page option
+        opt = input("Choice: ").strip().lower()                     # store user choice
 
         if opt == 'n' and optEnd < len(optList):    # if next page chosen
             optPage += 1                            # move to next page
@@ -153,10 +159,10 @@ def main(argv):
         elif opt == 'e':                            # if exit chosen
             print(f"Final string: {encryptS}\n")    # print current/final string
             exit(0)
-        elif opt.isdigit():                             # if number is chosen
-            run = callMod(int(opt), encryptS, file, modules, optList)     # call run with option, encrypted string, and file path
-            if run == False:                            # if false
-                print("Invalid option, try again.")     # invalid option
+        elif opt.isdigit():                                                 # if number is chosen
+            run = callMod(int(opt), encryptS, file, modules, optList)       # call run with option, encrypted string, and file path
+            if run == False:                                                # if false
+                print("Invalid option, try again.")                         # invalid option
             else:
                 encryptS = run                          # store returned string
                 optPage = 1                             # reset to first page
