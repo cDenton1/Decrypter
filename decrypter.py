@@ -78,12 +78,12 @@ def callMod(opt, encryptS, file, modules, optList):
         if run == 'e':                                                              # if exit
             print(f"Final string: {ret}\n")                                         # print final
             if file != None:                                                        # check if output file
-                file.write(f"\nFinal string: \n{optList[opt - 1][3:]}: {ret}\n")    # write to file
+                file.write(f"\nFinal string: \n{optList[opt - 1][1]}: {ret}\n")    # write to file
             exit(0)
 
         elif run == 'c':                                            # if continue
             if file != None:                                        # check if output file
-                file.write(f"\n{optList[opt - 1][4:]}: {ret}\n")    # write to file
+                file.write(f"\n{optList[opt - 1][1]}: {ret}\n")    # write to file
             return ret                                              # return result string
         
         elif run == 'r':                                    # if revert
@@ -131,9 +131,8 @@ def main(argv):
     if args.output:
         cDate = datetime.datetime.now().date()              # store date
         fpath = f"decrypter-{cDate}.txt"                    # create filename
-        with open(fpath, "w") as file:                      # open file
-            file.write(f"Encrypted String: {encryptS}\n")   # write given encryption string
-        file = open(fpath, "a")                             # open as append
+        file = open(fpath, "w")                             # open as append
+        file.write(f"Encrypted String: {encryptS}\n")       # write given encryption string
 
     # option page functionality
     optPerPage = 5
