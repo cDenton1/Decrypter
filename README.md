@@ -47,3 +47,7 @@ Adding a new module requires the following:
 - The file must be in the __modules__ subfolder
 - The filename must start with 'mod' and end with '.py'
 - Must include a callable function, 'conv'
+
+## More Info
+
+Check out my blog post, [Decrypter - Denton's Blog](https://cdenton1.github.io/2025/07/10/Decrypter.html), to know more about the tool.
