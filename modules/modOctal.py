@@ -1,4 +1,4 @@
-def conv(encryptS):
+def conv(encryptS, d):
     values = encryptS.strip().split()
     res = []
 
@@ -7,9 +7,9 @@ def conv(encryptS):
             n = ''.join(chr(int(i, 8)))
             res.append(''.join(n))
         result = ''.join(res)
-        print(f"\nFrom octal: {result}\n")
+        # print(f"\nFrom octal: {result}\n")
         return result
     
     except ValueError:
-        print(f"\nInvalid octal string: {encryptS}")
-        return encryptS 
+        # print(f"\nInvalid octal string: {encryptS}")
+        return False 

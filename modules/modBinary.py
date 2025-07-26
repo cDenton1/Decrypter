@@ -11,9 +11,9 @@ def changeBin(encryptS):
     print(f"Updated binary string: {upOne}")
     return upOne
 
-def conv(encryptS):
+def conv(encryptS, d):
     regBin = None
-    while regBin == None:
+    while regBin is None and d is False:
         regBin = input("\nTypical binary is made of 0/1's. \nDoes the submitted string follow that [y/n]? ").strip().lower()
         if regBin == 'y':
             regBin = True
@@ -29,9 +29,9 @@ def conv(encryptS):
         byteChunks = [upSpace[i:i+8] for i in range(0, len(upSpace), 8)]
         result = ''.join([chr(int(byte, 2)) for byte in byteChunks])
         
-        print(f"\nFrom Binary: {result}\n")
+        # print(f"\nFrom Binary: {result}\n")
         return result
     
     except Exception:
-        print(f"\nInvalid binary string: {encryptS}")
-        return encryptS 
+        # print(f"\nInvalid binary string: {encryptS}")
+        return False 

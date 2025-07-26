@@ -18,16 +18,20 @@ morse = {
     '"': '.-..-.', '@': '.--.-.'
 }
 
-def conv(encryptS):
-    morseRev = {v: k for k, v in morse.items()}
-    words = encryptS.strip().split(' / ')
-    dWords = []
+def conv(encryptS, d):
+    try: 
+        morseRev = {v: k for k, v in morse.items()}
+        words = encryptS.strip().split(' / ')
+        dWords = []
 
-    for word in words:
-        letters = word.split()
-        dLetters = [morseRev.get(letter, '?') for letter in letters]
-        dWords.append(''.join(dLetters))
+        for word in words:
+            letters = word.split()
+            dLetters = [morseRev.get(letter, '?') for letter in letters]
+            dWords.append(''.join(dLetters))
+        
+        result = ' '.join(dWords)
+        # print(f"\nFrom Morse Code: {result}\n")
+        return result
     
-    result = ' '.join(dWords)
-    print(f"\nFrom Morse Code: {result}\n")
-    return result
+    except: 
+        return False

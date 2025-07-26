@@ -1,6 +1,6 @@
 import re
 
-def conv(encryptS):
+def conv(encryptS, d):
     hexBytes = []
     cleanLine = encryptS.split('|')[0].strip()
 
@@ -14,9 +14,9 @@ def conv(encryptS):
     try:
         byteString = bytes.fromhex("".join(hexBytes))
         decoded = byteString.decode('utf-8')
-        print(f"\nFrom Hexdump: {decoded}\n")
+        # print(f"\nFrom Hexdump: {decoded}\n")
         return decoded
      
     except Exception as e:
-        print(f"\nInvalid hexdump: {encryptS}")
-        return encryptS 
+        # print(f"\nInvalid hexdump: {encryptS}")
+        return False 

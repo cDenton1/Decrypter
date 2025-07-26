@@ -10,41 +10,44 @@ def shiftLogic(encryptS, shift, digShift):
         else:
             shifted = char
         result += shifted
-    print(f"ROT{shift}: {result}")
+    print(f"ROT key {shift}")
     return result
 
-def conv(encryptS):
-    result = ""
-    digShift = None
-    while digShift == None:
-        digShift = input("\nDefault only shifts letters. \nShift digits [y/n]? ").strip().lower()
-        if digShift == 'y':
-            digShift = True
-        elif digShift == 'n':
-            digShift = False
-        else:
-            digShift = None
-            print("Invalid option, try again. \n")
+def conv(encryptS, d):
+    if d is True:
+        return True
+    else:
+        result = ""
+        digShift = None
+        while digShift == None:
+            digShift = input("\nDefault only shifts letters. \nShift digits [y/n]? ").strip().lower()
+            if digShift == 'y':
+                digShift = True
+            elif digShift == 'n':
+                digShift = False
+            else:
+                digShift = None
+                print("Invalid option, try again. \n")
 
-    bruteForce = None
-    while bruteForce == None:
-        bruteForce = input("\nDefault only shifts 13, brute force tries every possible shift. \nBrute force [y/n]? ").strip().lower()
-        if bruteForce == 'y':
-            bruteForce = True
-        elif bruteForce == 'n':
-            bruteForce = False
-        else:
-            bruteForce = None
-            print("Invalid option, try again. \n")
+        bruteForce = None
+        while bruteForce == None:
+            bruteForce = input("\nDefault only shifts 13, brute force tries every possible shift. \nBrute force [y/n]? ").strip().lower()
+            if bruteForce == 'y':
+                bruteForce = True
+            elif bruteForce == 'n':
+                bruteForce = False
+            else:
+                bruteForce = None
+                print("Invalid option, try again. \n")
 
-    print(f"\nEncrypted string: {encryptS}\n")
-    shifts = range(1, 26) if bruteForce else [13]
-    for shift in shifts:
-        result = shiftLogic(encryptS, shift, digShift)
-    
-    if bruteForce == True:
-        shift = int(input("\nEnter ROT shift # to continue with: "))
-        result = shiftLogic(encryptS, shift, digShift)
-        print(" ")
-    
-    return result
+        print(f"\nEncrypted string: {encryptS}\n")
+        shifts = range(1, 26) if bruteForce else [13]
+        for shift in shifts:
+            result = shiftLogic(encryptS, shift, digShift)
+        
+        if bruteForce == True:
+            shift = int(input("\nEnter ROT shift # to continue with: "))
+            result = shiftLogic(encryptS, shift, digShift)
+            print(" ")
+        
+        return result
