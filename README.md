@@ -38,7 +38,7 @@ sudo mandb
 decrypter <encrypted string> [-f <file>] [-o] [-m] [-h]
 ```
 
-![Usage Example Kali Linux](/assets/output1.png "Usage Example Kali Linux")
+![Usage Example Kali Linux](/assets/output2.png "Usage Example Kali Linux")
 
 ## Module Expansion
 
