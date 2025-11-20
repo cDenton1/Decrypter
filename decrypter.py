@@ -144,7 +144,7 @@ def entropy(encryptS, optList):      # entropy detection
         mod = modules[idx - 1]
         ret = mod.conv(encryptS, d)                            # store retured result
         if ret is not False and ret is not True:
-            if ret is not "":
+            if ret != "":
                 print(f"  From {optList[idx - 1][1]}: {ret}")     # print the module and returned string
         # elif ret is False:
         #     print(f"  INVALID {optList[idx - 1][1]} string")    # print if invalid
