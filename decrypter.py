@@ -189,7 +189,7 @@ def main(argv):
         file.write(f"Encrypted String: {encryptS}\n")       # write given encryption string
 
     # option page functionality
-    optPerPage = 8
+    optPerPage = 5
     optPage = 1
     opt = None
 
@@ -207,18 +207,21 @@ def main(argv):
         # for n, opt in pageOpt:                                  # loop through options
         #     print(f"  {BLUE}[{n}]{RESET} {opt}")                # print
 
-        leftC = pageOpt[:4]
-        rightC = pageOpt[4:]
+        # leftC = pageOpt[:4]
+        # rightC = pageOpt[4:]
 
-        while len(rightC) < len(leftC):
-            rightC.append(('', ''))
+        # while len(rightC) < len(leftC):
+        #     rightC.append(('', ''))
 
-        for i in range(len(leftC)):
-            left = leftC[i]
-            right = rightC[i]
-            leftS = f"{BLUE}[{left[0]}]{RESET} {left[1]}" if left[0] else ""
-            rightS = f"{BLUE}[{right[0]}]{RESET} {right[1]}" if right[0] else ""
-            print(f"  {leftS}\t\t{rightS}")
+        # for i in range(len(leftC)):
+        #     left = leftC[i]
+        #     right = rightC[i]
+        #     leftS = f"{BLUE}[{left[0]}]{RESET} {left[1]}" if left[0] else ""
+        #     rightS = f"{BLUE}[{right[0]}]{RESET} {right[1]}" if right[0] else ""
+        #     print(f"  {leftS}\t\t{rightS}")
+
+        for n, name in pageOpt:
+            print(f"  {BLUE}[{n}]{RESET} {name}")
 
         print(f"{RED}[d]{RESET} Detect")                        # print the detect option
         if optEnd < len(optList):                               # check if not the last page
