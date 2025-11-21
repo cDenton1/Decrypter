@@ -6,6 +6,7 @@ import sys
 import datetime
 import math
 from collections import Counter
+import itertools
 
 # option menus
 import menus.menuHelp as menuHelp
@@ -24,20 +25,6 @@ if str(os.name) == 'posix':
     MOD_PATH = os.path.join(SCRIPT_DR, 'modules')
 else:
     MOD_PATH = os.path.join(os.path.dirname(__file__), 'modules')
-
-# region IMPORTS
-# original static decryption module imports
-# import modules.modBase64 as modBase64
-# import modules.modROT13 as modROT13
-# import modules.modBinary as modBinary
-# import modules.modHex as modHex
-# import modules.modHexdump as modHexdump
-# import modules.modURLde as modURLde
-# import modules.modMorseC as modMorseC
-# import modules.modXOR as modXOR
-# import modules.modAtBash as modAtBash
-# import modules.modOctal as modOctal
-# endregion
 
 # dynamic loading for modules
 def loadMods():
@@ -71,10 +58,12 @@ def loadMods():
     print(f"{BLUE}[*] Loaded {iCount}/{count} modules.{RESET}")
     return modules
 
+
 def dOptList(modules, optList):      # creates option list of tuples for printing
     for i, m in enumerate(modules):
         optList.append((i + 1, m.__name__[3:]))
     return optList
+
 
 # call decryption module
 def callMod(opt, encryptS, file, modules, optList):
@@ -113,9 +102,11 @@ def callMod(opt, encryptS, file, modules, optList):
         else:
             print("\nInvalid option, try again.")
 
+
 def readFile(fpath):            # if input file
     file = open(fpath, "r")     # store and read file
     return file.readline()      # read line, store string
+
 
 def asciiTitle():     # terminal ascii title output
     print(" ___     ____    __    ___            ___   ______  ____  ___    ")
@@ -131,6 +122,7 @@ def asciiTitle():     # terminal ascii title output
     # ||__//  ||___  \\__// ||   \\  //    ||       ||   ||___ ||   \\
     
     return
+
 
 def entropy(encryptS, optList):      # entropy detection
     frequency = Counter(encryptS)
@@ -148,6 +140,95 @@ def entropy(encryptS, optList):      # entropy detection
                 print(f"  From {optList[idx - 1][1]}: {ret}")     # print the module and returned string
         # elif ret is False:
         #     print(f"  INVALID {optList[idx - 1][1]} string")    # print if invalid
+
+
+def chain_bruteforce(input_text, modules, optList):
+    print("\nBrute Force Chaining")
+    clen = input("Enter chain length OR range (ex. 2-4): ").strip()
+
+    if "-" in clen:                     # parse a single length or range
+        start, end = clen.split("-")
+        chain_lengths = range(int(start), int(end) + 1)
+    else:
+        chain_lengths = [int(clen)]
+
+    mod_indexes = list(range(len(modules)))     # list of module indexes
+    original = input_text
+
+    def valid_output(text, original):
+        if not isinstance(text, str):       # avoids errors, ensure it's a string
+            return False
+        
+        if (
+            not text                                            # empty string, None, False
+            or text == original                                 # unchanged
+            or text == "?"                                      # placeholder
+            or isinstance(text, bool)                           # True/False
+            or text.strip() == ""                               # whitespace-only
+            or text.startswith("񀁁")                             # weird junk patterns
+            or text == "????????????????????????????????????"   # weird junk
+            or text == None                                     # empty strings
+            or "\x00" in text                                   # null character
+        ):
+            return False
+        return True
+
+    print("\n[+] Starting chained brute force...\n")
+
+    for L in chain_lengths:     # loop over chain lengths
+        printed_header = False
+
+        for chain in itertools.product(mod_indexes, repeat=L):      # every possible sequence of operations
+            active = [(original, [])]                               # [(text, path)]
+
+            for mod_index in chain:         # process each module in the chain
+                new_active = []
+                mod = modules[mod_index]
+                mod_name = optList[mod_index][1].lower()
+
+                for text, path in active:
+                    if optList[mod_index][1] in path:       # skip duplicate module
+                        continue
+                    if mod_name in ("rot", "rot13") and any(p.startswith("ROT") for p in path):
+                        continue                            # skip ROT if already used, no matter the shift
+
+                    if mod_name == "rot13" or mod_name == "rot":    # ROT special case
+                        try:
+                            rot_results = mod.silent_rot(text)      # dict {shift: result}
+                        except:
+                            continue
+
+                        for shift, out in rot_results.items():
+                            if valid_output(out, input_text):
+                                new_active.append((out, path + [f"ROT{shift}"]))
+                        continue
+
+                    try:    # normal module
+                        out = mod.conv(text, True)
+                    except:
+                        out = None
+
+                    if valid_output(out, input_text):
+                        new_active.append((out, path + [optList[mod_index][1]]))
+
+                active = new_active     # move to next step in chain
+
+                if not active:          # stop, no valid branches
+                    break
+
+            for final_text, path in active:     # print results
+                if not valid_output(final_text, input_text):
+                    continue
+                
+                if not printed_header:
+                    print(f"--- Length {L} ---")
+                    printed_header = True
+
+                chain_str = " > ".join(path)
+                print(f"{chain_str} → {GREEN}{final_text}{RESET}")
+
+    print("\n[+] Chain brute force complete.\n")
+
 
 def main(argv):
     asciiTitle()
@@ -224,6 +305,7 @@ def main(argv):
             print(f"  {BLUE}[{n}]{RESET} {name}")
 
         print(f"{RED}[d]{RESET} Detect")                        # print the detect option
+        print(f"{RED}[b]{RESET} Brute-Force Chaining")
         if optEnd < len(optList):                               # check if not the last page
             print(f"{RED}[n]{RESET} Next Page")                 # print next page option
         opt = input("Choice: ").strip().lower()                 # store user choice
@@ -236,7 +318,9 @@ def main(argv):
             print(f"Final string: {encryptS}\n")    # print current/final string
             exit(0)
         elif opt == 'd':                            # if detect is chosen
-            entropy(encryptS, optList)                       # call entropy function
+            entropy(encryptS, optList)              # call entropy function
+        elif opt == 'b':                            # if chaining method is chosen
+            chain_bruteforce(encryptS, modules, optList)              # call chaining funtion         
         elif opt.isdigit():                                                 # if number is chosen
             run = callMod(int(opt), encryptS, file, modules, optList)       # call run with option, encrypted string, and file path
             if run == False:                                                # if false

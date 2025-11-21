@@ -10,12 +10,17 @@ def shiftLogic(encryptS, shift, digShift):
         else:
             shifted = char
         result += shifted
-    print(f"ROT key {shift}")
     return result
+
+def silent_rot(encryptS):
+    results = {}
+    for shift in range(1, 26):
+        results[shift] = shiftLogic(encryptS, shift, False)
+    return results
 
 def conv(encryptS, d):
     if d is True:
-        return True
+        return shiftLogic(encryptS, 13, False)
     else:
         result = ""
         digShift = None
@@ -44,6 +49,7 @@ def conv(encryptS, d):
         shifts = range(1, 26) if bruteForce else [13]
         for shift in shifts:
             result = shiftLogic(encryptS, shift, digShift)
+            print(f"ROT key {shift}: {result}")
         
         if bruteForce == True:
             shift = int(input("\nEnter ROT shift # to continue with: "))
